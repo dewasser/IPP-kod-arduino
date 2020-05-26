@@ -1,0 +1,62 @@
+#include <SoftwareSerial.h> 
+SoftwareSerial hc06(2,3);
+int sign = 0; 
+int Heater = 6; 
+void setup() {
+  // put your setup code here, to run once:
+  Serial.begin(9600);
+  Serial.println("ENTER COMMAND:");
+  hc06.begin(9600);
+  pinMode(Heater,OUTPUT);
+  pinMode(7,INPUT);
+
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+if (hc06.available()) 
+{
+   sign = hc06.read();
+   Serial.println(sign);
+   Serial.write(hc06.read()); 
+}
+if(Serial.available()){
+  hc06.write(Serial.read());
+}
+   
+ if (sign==1) 
+ { 
+   digitalWrite(Heater, HIGH); 
+   //hc06.print(Heater ON); 
+   if(analogRead(A5)/4>200){
+  digitalWrite(Heater, LOW);
+
+delay(50*(analogRead(A4)));
+}
+ } 
+ else if (sign==30) 
+ { 
+   digitalWrite(Heater, LOW); 
+   //hc06.print(Heater OFF); 
+ } 
+ 
+ 
+if(digitalRead(7)==HIGH){
+  analogWrite(Heater, analogRead(A5)/4);
+ if(analogRead(A5)/4>200){
+  digitalWrite(Heater, LOW);
+}
+delay(50*(analogRead(A4)));
+  }
+  else
+  {
+    digitalWrite(Heater,LOW);
+  }
+ 
+if(analogRead(A5)/4>200){
+  digitalWrite(Heater, LOW);
+}
+
+
+
+}
